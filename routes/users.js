@@ -16,25 +16,25 @@ router.get('/register', (req, res) => {
 
 //register handler
 router.post('/register', (req, res) => {
-	const{name, email, password, password2} = req.body;
+	const { name, email, password, password2 } = req.body;
 	let errors = [];
 
 	//Check required
-	if(!name || !email || !password || !password2){
-		errors.push({msg : 'Please fill in all fields'});
-	}	
+	if (!name || !email || !password || !password2) {
+		errors.push({ msg: 'Please fill in all fields' });
+	}
 
 	//Check pass match
-	if(password !== password2){
-		errors.push({msg: 'Passwords do not match'});
+	if (password !== password2) {
+		errors.push({ msg: 'Passwords do not match' });
 	}
 
 	//Check pass length
-	if(password.length < 6){
-		errors.push({msg: 'Password should be at least 6 characters'});
+	if (password.length < 6) {
+		errors.push({ msg: 'Password should be at least 6 characters' });
 	}
 
-	if(errors.length > 0){
+	if (errors.length > 0) {
 		res.render('register', {
 			errors,
 			name,
@@ -42,36 +42,36 @@ router.post('/register', (req, res) => {
 			password,
 			password2
 		});
-	}else{
-		User.findOne({ email:email })
+	} else {
+		User.findOne({ email: email })
 			.then(user => {
-				if(user){
+				if (user) {
 					//user exists and rerenders with the same fields as before
-					errors.push({ msg: 'Email is already in use'});
+					errors.push({ msg: 'Email is already in use' });
 					res.render('register', {
-					errors,
-					name,
-					email,
-					password,
-					password2
+						errors,
+						name,
+						email,
+						password,
+						password2
 					});
 
-				}else{
+				} else {
 					const newUser = new User({
-						name, 
+						name,
 						email,
 						password
 					});
 
 					//Hash pass
-					bcrypt.genSalt(10, (err, salt) => 
-						bcrypt.hash(newUser.password,salt, (err, hash) => {
-							if(err) throw err;
+					bcrypt.genSalt(10, (err, salt) =>
+						bcrypt.hash(newUser.password, salt, (err, hash) => {
+							if (err) throw err;
 							//set pass to hash
 							newUser.password = hash;
 							//save user to mongo
 							newUser.save()
-								.then(user => {
+								.then(() => {
 									req.flash('success_msg', 'You are now registered and can log in');
 									res.redirect('/users/login');
 								})

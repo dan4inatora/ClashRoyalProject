@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-const app = express	();
+const app = express();
 const index_routes = require('./routes/index');
 const users_routes = require('./routes/users');
 
@@ -14,9 +14,9 @@ require('./config/passport')(passport);
 
 
 //connect to mongo DB
-mongoose.connect("mongodb://localhost/users",{ useNewUrlParser :"true"})
+mongoose.connect("mongodb://localhost/users", { useNewUrlParser: "true" })
 	.then(() => console.log('MongoDB connected...'))
-	.catch(() => console.log(err));
+	.catch((err) => console.log(err));
 
 //EJS
 app.use(expressLayouts);
@@ -27,9 +27,9 @@ app.use(express.urlencoded({ extended: false }));
 
 //express session middlare
 app.use(session({
-  secret: 'secret',
-  resave: true,
-  saveUninitialized: true
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
 }));
 
 //Passport middleware
@@ -55,4 +55,4 @@ app.use('/users', users_routes);
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT	, console.log(`Server started on ${PORT	}`));
+app.listen(PORT, console.log(`Server started on ${PORT}`));
