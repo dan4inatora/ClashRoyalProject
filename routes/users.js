@@ -75,8 +75,8 @@ router.post('/register', (req, res) => {
 									req.flash('success_msg', 'You are now registered and can log in');
 									res.redirect('/users/login');
 								})
-								.catch()
-						}))
+								.catch();
+						}));
 				}
 			});
 	}
@@ -97,6 +97,6 @@ router.get('/logout', (req, res) => {
 	req.logout();
 	req.flash('success_msg', 'You logged out');
 	res.redirect('/users/login');
-})
+});
 
 module.exports = router;
